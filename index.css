@@ -1,0 +1,23 @@
+.button {
+  background-color: #6495ed;
+}
+.entete {
+  text-align: right;
+}
+.bordure {
+  border: solid 5px #f5f5f5;
+  background-color: #f5f5f5;
+}
+.article {
+  text-align: center;
+  padding: 10px;
+}
+.article1 {
+  border: solid 5px #f5f5f5;
+  background-color: #f5f5f5;
+}
+.pied-de-page {
+  text-align: center;
+  border: solid 5px #f5f5f5;
+  background-color: #f5f5f5;
+}
