@@ -1,7 +1,10 @@
-const express = require("express");
+//const express = require("express");
+const mongodb = require("mongodb");
 
-const app = express();
-app.use(express.json());
+//const app = express();
+//app.use(express.json());
+const app = mongodb();
+app.use(mongodb());
 
 // CREATE users
 app.post("/users", (req, res) => {
