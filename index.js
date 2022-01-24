@@ -6,6 +6,37 @@ const mongodb = require("mongodb");
 const app = mongodb();
 app.use(mongodb());
 
+let mongodbClient;
+let db;
+
+function dbConnect() {
+  return new Promise((resolve, reject) => {
+    if (db) {
+      resolve(db);
+    } else {
+      mongodb.MongoClient.connect(
+        appSettings.mongodb_url,
+        function (err, client) {
+          if (err) {
+            logger.error(
+              "Erreur de connexion à l’URL de MongoDB URL: " +
+                appSettings.mongodb_url
+            );
+            reject(err);
+          }
+          mongodbClient = client;
+          db = mongodbClient.db(appSettings.mongodb_db_name);
+          // Soyez sûr que la connection est fermée à la sortie de Node
+          process.on("exit", (code) => {
+            dbClose();
+          });
+          resolve(db);
+        }
+      );
+    }
+  });
+}
+
 // CREATE users
 app.post("/users", (req, res) => {
   const {
