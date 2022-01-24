@@ -1,8 +1,3 @@
-<!-- const mongoose = require('mongoose');
-mongoose.connect('mongodb://localhost:27017/test'); const Cat =
-mongoose.model('Cat', { name: String }); const kitty = new Cat({ name:
-'Zildjian' }); kitty.save().then(() => console.log('meow')); -->
-
 <!DOCTYPE html>
 <html>
   <head>
@@ -36,6 +31,47 @@ mongoose.model('Cat', { name: String }); const kitty = new Cat({ name:
     <div>
       <input class="button" type="button" value="Sign In" />
     </div>
+    <script>
+      var windowObjectReference = require("windowObjectReference");
+      var strWindowFeatures = require("strWindowFeatures");
+      var strWindowFeatures =
+        "menubar=yes,location=yes,resizable=yes,scrollbars=yes,status=yes";
+      // Affichage hasboard selon le user
+      if ((profile = "reader")) {
+        var windowObjectReference;
+        var strWindowFeatures;
+        function openRequestedPopup() {
+          windowObjectReference = window.open(
+            "https://blog-project-vercel.vercel.app/reader.html",
+            "DasboardReader_WindowName",
+            strWindowFeatures
+          );
+        }
+      } else {
+        if ((user = "author")) {
+          var windowObjectReference;
+          var strWindowFeatures;
+          function openRequestedPopup() {
+            windowObjectReference = window.open(
+              "https://blog-project-vercel.vercel.app/author.html",
+              "DasboardAuthor_WindowName",
+              strWindowFeatures
+            );
+          }
+        } else {
+          var strWindowFeatures =
+            "menubar=yes,location=yes,resizable=yes,scrollbars=yes,status=yes";
+
+          function openRequestedPopup() {
+            windowObjectReference = window.open(
+              "https://blog-project-vercel.vercel.app/admin.html",
+              "DasboardAdmin_WindowName",
+              strWindowFeatures
+            );
+          }
+        }
+      }
+    </script>
   </body>
 
   <footer>
@@ -44,3 +80,4 @@ mongoose.model('Cat', { name: String }); const kitty = new Cat({ name:
     </nav>
   </footer>
 </html>
+}
