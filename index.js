@@ -1,6 +1,19 @@
 const express = require("express");
-
 const app = express();
+
+/**
+ * Import MongoClient et la connexion à la DB
+ */
+const MongoClient = require("mongodb").MongoClient;
+const url = "mongodb://localhost:27017";
+const dbName = "projetMP";
+let db
+
+MongoClient.connect(url, function(err, client) {
+  console.log("Connected successfully to server");
+  db = client.db(dbName);
+});
+
 app.use(express.json());
 
 // CREATE users
