@@ -12,76 +12,85 @@ const getNextId = async (entity) => {
   return nextId;
 };
 
-const routeUsers = ({ app }) => {
-  app.post("/users", async (req, res) => {
-    const {
-      body: { username, email },
-    } = req;
+// CREATE users
+app.post("/users", (req, res) => {
+  const {
+    body: { mail, password },
+  } = req;
 
-    const id = await getNextId();
-    const user = { id, username, email };
+  idAutoIncrements.users += 1;
+  const id = idAutoIncrements.users;
+  const user = {
+    id,
+    mail,
+    password,
+  };
 
-    await writeFile(`.db/users/${id}.json`, JSON.stringify(user));
+  db.users[id] = user;
 
-    res.send(user);
-  });
-  app.get("/users", async (req, res) => {
-    const entries = await readdir("./db/users");
+  res.send(user);
+});
 
-    const users = (
-      await Promise.all(
-        entries
-          .filter((entry) => entry.includes(".json"))
-          .map((entry) => readFile(`./db/users/${entry}`))
-      )
-    ).map((data) => JSON.parse(data));
+//READ users collection
+app.get("/users", (req, res) => {
+  res.send(Object.values(db.users));
+});
 
-    res.send(users);
-  });
+//READ users single
+app.get("/users/:userId", (req, res) => {
+  const {
+    params: { userId },
+  } = req;
 
-  app.get("/users/:userId", async (req, res) => {
-    const {
-      params: { userId },
-    } = req;
+  const user = db.users[userId];
 
-    try {
-      const data = String(await readFile(`./db/users/${userId}.json`));
-      const user = JSON.parse(data);
+  if (!user) {
+    res.status(404).send({ error: "Not found" });
 
-      res.send(user);
-    } catch (err) {
-      res.status(404).send({ error: "Not found" });
+    return;
+  }
 
-      return;
-    }
-  });
+  res.send(user);
+});
 
-  app.put("/users/:userId", async (req, res) => {
-    const {
-      body: { username, email },
-      params: { userId },
-    } = req;
+// UPDATE users
+app.put("/users/:userID", (req, res) => {
+  const {
+    params: { userId },
+    body: { mail, password },
+  } = req;
 
-    const user = {
-      id: Number(userId),
-      username,
-      email,
-    };
+  const user = db.users[userId];
 
-    await writeFile(`./db/users/${userId}.json`, JSON.stringify(user));
+  if (!user) {
+    res.status(404).send({ error: "Not found" });
 
-    res.send(user);
-  });
+    return;
+  }
 
-  app.delete("/users/:userId", async (req, res) => {
-    const {
-      params: { userId },
-    } = req;
+  user.mail = mail || user.mail;
+  user.password = password || user.password;
+});
 
-    unlink(`./db/users/${userId}.json`);
+// DELETE users
+app.delete("/users/:userId", (req, res) => {
+  const {
+    params: { userId },
+  } = req;
 
-    res.status(204).send();
-  });
-};
+  const {
+    users: { [userId]: user, ...otherUsers },
+  } = db;
+
+  if (!user) {
+    res.status(404).send({ error: "Not found" });
+
+    return;
+  }
+
+  db.users = otherUsers;
+
+  res.send(user);
+});
 
 module.exports = routeUsers;
