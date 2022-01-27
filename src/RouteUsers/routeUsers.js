@@ -1,16 +1,8 @@
-const { writeFile, readFile, unlink, readdir } = require("fs/promises");
+
 const mongoose = require("mongoose");
 mongoose.connect("mongodb://localhost:27017/projetMP");
-const checkUserIdParam = require("../validators/checkUserIdParam");
 
-const getNextId = async (entity) => {
-  const id = Number(await readFile(`./db/${entity}/lastId`));
-  const nextId = id + 1;
 
-  await writeFile("./db/lastId", String(nextId));
-
-  return nextId;
-};
 
 // CREATE users
 app.post("/users", (req, res) => {
